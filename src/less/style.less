@@ -1,0 +1,64 @@
+@border-color: #77f;
+@border-size: 3px;
+
+@window-padding: 5px;
+@window-color: #fff;
+
+@resize-handle-size: 10px;
+@resize-handle-color: @border-color;
+
+@title-color: #fff;
+@title-size: 20px;
+
+
+body {
+    font: 13px/20px Ubuntu, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.workspace {
+    display: block;
+    height: 10000px;
+    width: 10000px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 0 10px rgba(0,0,0, 0.5);
+}
+
+.window {
+    background: @window-color;
+    overflow: hidden;
+    min-height: 50px;
+    min-width: 100px;
+    padding-top: @title-size;
+    border: @border-size solid @border-color;
+    box-shadow: 0 2px 5px rgba(0,0,0, 0.4);
+    position: absolute;
+
+    > .title-bar {
+        background: @border-color;
+        color: @title-color;
+        position: absolute;
+        font-size: @title-size * 2/3;
+        top: 0;
+        left: 0;
+        right: 0;
+        line-height: @title-size;
+        padding: 0 @border-size;
+        height: @title-size;
+        cursor: default;
+    }
+
+    > .content {
+        padding: @window-padding;
+    }
+
+    > .resize-handle {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        border-width: (@resize-handle-size / 2);
+        border-color: transparent @resize-handle-color @resize-handle-color transparent;
+        border-style: solid;
+        cursor: nwse-resize;
+    }
+}
