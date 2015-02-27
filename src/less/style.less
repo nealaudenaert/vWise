@@ -16,6 +16,10 @@ body {
     font: 13px/20px Ubuntu, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+iframe {
+    border: 0;
+}
+
 .workspace {
     display: block;
     height: 10000px;
@@ -35,6 +39,10 @@ body {
     position: absolute;
     display: flex;
     flex-flow: column nowrap;
+
+    &.active {
+        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
 
     > .title-bar {
         background: @border-color;
