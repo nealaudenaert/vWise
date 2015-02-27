@@ -1,200 +1,58 @@
 define(function (require) {
 
-    var Marionette = require('marionette'),
-        interact   = require('interact'),
-        _          = require('underscore');
+    var config = require('config');
 
-
-    var WindowView = Marionette.LayoutView.extend({
-        template: require('templates/window.html'),
-        className: 'window',
-
-        regions: {
-            content: 'content'
-        },
-
-        templateHelpers: function () {
-            return {
-                title: this.title
-            };
-        },
-
-        triggers: {
-            mousedown: 'focus'
-        },
-
-        initialize: function (options) {
-            var opts = _.defaults(options || {}, {
-                title: 'untitled'
-            });
-
-            _.extend(this, _.pick(opts, 'title'));
-
-            this._isShown = false;
-        },
-
-        show: function (view) {
-            this.getRegion('content').show(view);
-        },
-
-        onRender: function () {
-            var _this = this;
-
-            interact(this.$('> .title-bar').get(0)).draggable({
-                onmove: function (evt) {
-                    var position = _this.getPosition();
-                    _this.setPosition(position.x + evt.dx, position.y + evt.dy);
-                }
-            });
-
-            interact(this.el).resizable(true)
-                .on('resizemove', function (evt) {
-                    var size = _this.getSize();
-                    _this.setSize(size.width + evt.dx, size.height + evt.dy);
-                });
-
-            if (this.x) {
-                this.$el.css('left', this.x);
-            }
-
-            if (this.y) {
-                this.$el.css('top', this.y);
-            }
-
-            if (this.width) {
-                this.$el.width(this.width);
-            }
-
-            if (this.height) {
-                this.$el.height(this.height);
-            }
-
-            if (this.zIndex) {
-                this.$el.css('z-index', this.zIndex);
-            }
-
-            this._isShown = true;
-        },
-
-        setPosition: function (x, y) {
-            this.x = x;
-            this.y = y;
-
-            if (this._isShown) {
-                this.$el.css({ left: x, top: y });
-            }
-        },
-
-        getPosition: function () {
-            return {
-                x: this.x || 0,
-                y: this.y || 0
-            };
-        },
-
-        setSize: function (width, height) {
-            this.width = width;
-            this.height = height;
-
-            if (this._isShown) {
-                this.$el.width(width).height(height);
-            }
-        },
-
-        getSize: function () {
-            return {
-                width: this.width || (this._isShown ? this.$el.width() : 0),
-                height: this.height || (this._isShown ? this.$el.height() : 0)
-            };
-        },
-
-        setZIndex: function (zIndex) {
-            this.zIndex = zIndex;
-
-            if (this._isShown) {
-                this.$el.css('z-index', zIndex);
-            }
-        },
-
-        getZIndex: function () {
-            return this.zIndex;
-        }
-    });
-
-
-
-    function WindowStack() {
-        this.windows = [];
-    }
-
-    _.extend(WindowStack.prototype, {
-        push: function (win) {
-            this.windows.push(win);
-
-            win.on('focus', function () {
-                this.focus(win);
-            }, this);
-        },
-
-        remove: function (win) {
-            var index = this.windows.indexOf(win);
-
-            if (index === -1) {
-                return;
-            }
-
-            this.windows.splice(index, 1);
-        },
-
-        focus: function (win) {
-            var index = this.windows.indexOf(win);
-
-            if (index === -1) {
-                return;
-            }
-
-            // move focused window to the top
-            this.windows.splice(index, 1);
-            this.windows.push(win);
-
-            this._update();
-        },
-
-        _update: function () {
-            _.each(this.windows, function (win, zIndex) {
-                win.setZIndex(zIndex);
-            });
-        }
-    });
-
-
-    var Workspace = Marionette.ItemView.extend({
-        template: _.constant(''),
-        className: 'workspace',
-
-        initialize: function () {
-            this.windowStack = new WindowStack();
-        },
-
-        createWindow: function (options) {
-            var win = new WindowView(options);
-            this.windowStack.push(win);
-
-            // borrowed from marionette's collection view
-            this.$el.append(win.render().el);
-            Marionette.triggerMethodOn(win, 'show');
-
-            return win;
-        }
-    });
-
-
+    var Workspace = require('./workspace');
+    var BookContentView = require('./content/book');
+    var MapContentView = require('./content/map');
+    var ImageContentView = require('./content/image');
+    var VideoContentView = require('./content/video');
 
 
     var workspace = new Workspace({ el: '.workspace' });
-    for (var i = 0; i < 3; i++) {
-        var w = workspace.createWindow({ title: i });
-        w.setPosition(i * 30, i * 30);
-        w.setSize(200, 200);
-    }
+
+    var w1 = workspace.createWindow({ title: 'HathiTrust Book Reader' });
+    w1.setSize(600, 700);
+    w1.setPosition(0, 0);
+
+    var book = new BookContentView({
+        bookId: 'uc2.ark:/13960/t3610x12d'
+    });
+    w1.show(book);
+
+
+    var w2 = workspace.createWindow({ title: 'Google Maps' });
+    w2.setSize(800, 600);
+    w2.setPosition(30, 30);
+
+    var map = new MapContentView({
+        apiKey: config.googleApiKey
+    });
+    w2.show(map);
+
+
+    var w3 = workspace.createWindow({ title: 'The Mona Lisa' });
+    w3.setSize(515, 768);
+    w3.lockAspectRatio();
+    w3.setPosition(60, 60);
+
+    var image = new ImageContentView({
+        uri: 'http://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/687px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg'
+    });
+    w3.show(image);
+
+
+    var w4 = workspace.createWindow({ title: 'HTML5 Video' });
+    w4.setSize(970, 430);
+    w4.lockAspectRatio();
+    w4.setPosition(90, 90);
+
+    var video = new VideoContentView({
+        autoplay: true,
+        sources: [
+            { uri: 'http://vjs.zencdn.net/v/oceans.mp4', type: 'video/mp4' },
+            { uri: 'http://vjs.zencdn.net/v/oceans.webm', type: 'video/webm' }
+        ]
+    });
+    w4.show(video);
 });
