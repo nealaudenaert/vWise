@@ -1,14 +1,15 @@
 var gulp = require('gulp');
 
 // gulp plugins
-var amdOptimize = require('amd-optimize');
-var compile     = require('gulp-compile');
-var concat      = require('gulp-concat');
-var less        = require('gulp-less');
-var merge       = require('merge2');
-var minifyHTML  = require('gulp-minify-html');
-var tap         = require('gulp-tap');
-var wrap        = require('gulp-wrap-amd');
+var amdOptimize  = require('amd-optimize');
+var autoprefixer = require('gulp-autoprefixer');
+var compile      = require('gulp-compile');
+var concat       = require('gulp-concat');
+var less         = require('gulp-less');
+var merge        = require('merge2');
+var minifyHTML   = require('gulp-minify-html');
+var tap          = require('gulp-tap');
+var wrap         = require('gulp-wrap-amd');
 
 
 // path configuration
@@ -64,6 +65,9 @@ gulp.task('javascripts', function () {
 gulp.task('stylesheets', function () {
     gulp.src(srcPath + '/less/style.less')
         .pipe(less())
+        .pipe(autoprefixer({
+            browsers: ['> 5%']
+        }))
         .pipe(gulp.dest('dist/css'));
 });
 

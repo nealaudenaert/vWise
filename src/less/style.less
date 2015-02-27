@@ -28,21 +28,18 @@ body {
 .window {
     background: @window-color;
     overflow: hidden;
-    min-height: 50px;
+    min-height: @title-size;
     min-width: 100px;
-    padding-top: @title-size;
     border: @border-size solid @border-color;
     box-shadow: 0 2px 5px rgba(0,0,0, 0.4);
     position: absolute;
+    display: flex;
+    flex-flow: column nowrap;
 
     > .title-bar {
         background: @border-color;
         color: @title-color;
-        position: absolute;
         font-size: @title-size * 2/3;
-        top: 0;
-        left: 0;
-        right: 0;
         line-height: @title-size;
         padding: 0 @border-size;
         height: @title-size;
@@ -51,6 +48,13 @@ body {
 
     > .content {
         padding: @window-padding;
+        flex: 1;
+        display: flex;
+        align-items: stretch;
+
+        > * {
+            flex: 1;
+        }
     }
 
     > .resize-handle {
