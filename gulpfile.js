@@ -2,9 +2,13 @@ var gulp = require('gulp');
 
 // gulp plugins
 var amdOptimize = require('amd-optimize');
+var compile     = require('gulp-compile');
 var concat      = require('gulp-concat');
 var less        = require('gulp-less');
 var merge       = require('merge2');
+var minifyHTML  = require('gulp-minify-html');
+var tap         = require('gulp-tap');
+var wrap        = require('gulp-wrap-amd');
 
 
 // path configuration
@@ -20,7 +24,18 @@ gulp.task('html', function () {
 });
 
 gulp.task('javascripts', function () {
-    var jsFiles = gulp.src(srcPath + '/js/**/*.js')
+    var templates = gulp.src(srcPath + '/js/**/*.ejs')
+        // .pipe(tap(function (file, t) {
+        //     if (file.path.match(/\.html\.ejs$/)) {
+        //         return t.through(minifyHTML, [{ loose: true }]);
+        //     }
+        // }))
+        .pipe(compile())
+        .pipe(wrap());
+
+    var jsFiles = gulp.src(srcPath + '/js/**/*.js');
+
+    var main = merge(templates, jsFiles)
         .pipe(amdOptimize('main', {
             findNestedDependencies: true,
             paths: {
@@ -37,11 +52,11 @@ gulp.task('javascripts', function () {
         .pipe(concat('main.js'));
 
     var vendors = gulp.src([
-        vendorPath + '/almond/almond.js'
-    ])
+            vendorPath + '/almond/almond.js'
+        ])
         .pipe(concat('vendors.js'));
 
-    return merge(vendors, jsFiles)
+    return merge(vendors, main)
         .pipe(gulp.dest(distPath + '/js'));
 });
 
