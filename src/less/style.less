@@ -4,7 +4,8 @@
 @window-padding: 5px;
 @window-color: #fff;
 
-@resize-handle-size: 10px;
+@resize-handle-size: 20px;
+@resize-handle-border-size: @window-padding;
 @resize-handle-color: @border-color;
 
 @title-color: #fff;
@@ -56,9 +57,10 @@ body {
         position: absolute;
         bottom: 0;
         right: 0;
-        border-width: (@resize-handle-size / 2);
+        width: @resize-handle-size - @resize-handle-border-size;
+        height: @resize-handle-size - @resize-handle-border-size;
+        border-width: @resize-handle-border-size;
         border-color: transparent @resize-handle-color @resize-handle-color transparent;
         border-style: solid;
-        cursor: nwse-resize;
     }
 }
