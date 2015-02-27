@@ -1,41 +1,61 @@
-/*global require*/
 var gulp = require('gulp');
 
-var concat = require('gulp-concat');
-var less   = require('gulp-less');
-var merge  = require('merge2');
+// gulp plugins
+var amdOptimize = require('amd-optimize');
+var concat      = require('gulp-concat');
+var less        = require('gulp-less');
+var merge       = require('merge2');
 
+
+// path configuration
+var srcPath     = 'src';
+var stagingPath = 'build';
+var vendorPath  = stagingPath + '/vendor';
+var distPath    = 'dist';
+
+
+gulp.task('html', function () {
+    gulp.src(srcPath + '/**/*.html')
+        .pipe(gulp.dest(distPath));
+});
 
 gulp.task('javascripts', function () {
-    var javascripts = gulp.src('src/js/**/*.js');
+    var jsFiles = gulp.src(srcPath + '/js/**/*.js')
+        .pipe(amdOptimize('main', {
+            findNestedDependencies: true,
+            paths: {
+                'backbone':            vendorPath + '/backbone/backbone',
+                'backbone.babysitter': vendorPath + '/backbone.babysitter/lib/backbone.babysitter',
+                'backbone.wreqr':      vendorPath + '/backbone.wreqr/lib/backbone.wreqr',
+                'interact':            vendorPath + '/interact/interact',
+                'jquery':              vendorPath + '/jquery/dist/jquery',
+                'marionette':          vendorPath + '/marionette/lib/core/backbone.marionette',
+                'promise':             vendorPath + '/bluebird/js/browser/bluebird',
+                'underscore':          vendorPath + '/underscore/underscore'
+            }
+        }))
+        .pipe(concat('main.js'));
 
     var vendors = gulp.src([
-        'build/vendor/jquery/dist/jquery.js',
-        'build/vendor/interact/interact.js'
-    ]);
+        vendorPath + '/almond/almond.js'
+    ])
+        .pipe(concat('vendors.js'));
 
-    merge(vendors, javascripts)
-        .pipe(concat('main.js'))
-        .pipe(gulp.dest('dist/js'));
+    return merge(vendors, jsFiles)
+        .pipe(gulp.dest(distPath + '/js'));
 });
 
 
 gulp.task('stylesheets', function () {
-    gulp.src('src/less/style.less')
+    gulp.src(srcPath + '/less/style.less')
         .pipe(less())
         .pipe(gulp.dest('dist/css'));
 });
 
-
-gulp.task('html', function () {
-    gulp.src('src/**/*.html')
-        .pipe(gulp.dest('dist'));
-});
-
 gulp.task('watch', function () {
-    gulp.watch('src/**/*.html', ['html']);
-    gulp.watch('src/js/**/*.js', ['javascripts']);
-    gulp.watch('src/less/**/*.less', ['stylesheets']);
+    gulp.watch(srcPath + '/**/*.html', ['html']);
+    gulp.watch(srcPath + '/js/**/*', ['javascripts']);
+    gulp.watch(srcPath + '/less/**/*.less', ['stylesheets']);
 });
 
 
