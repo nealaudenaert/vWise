@@ -48,16 +48,19 @@ gulp.task('javascripts', function () {
                 'marionette':          vendorPath + '/marionette/lib/core/backbone.marionette',
                 'promise':             vendorPath + '/bluebird/js/browser/bluebird',
                 'underscore':          vendorPath + '/underscore/underscore'
-            }
+            },
+            exclude: ['config']
         }))
         .pipe(concat('main.js'));
+
+    var config = gulp.src(srcPath + '/js/config.js');
 
     var vendors = gulp.src([
             vendorPath + '/almond/almond.js'
         ])
         .pipe(concat('vendors.js'));
 
-    return merge(vendors, main)
+    return merge(vendors, config, main)
         .pipe(gulp.dest(distPath + '/js'));
 });
 
