@@ -3,14 +3,18 @@ var gulp = require('gulp');
 
 var concat = require('gulp-concat');
 var less   = require('gulp-less');
+var merge  = require('merge2');
 
 
 gulp.task('javascripts', function () {
-    gulp.src([
+    var javascripts = gulp.src('src/js/**/*.js');
+
+    var vendors = gulp.src([
         'build/vendor/jquery/dist/jquery.js',
-        'build/vendor/interact/interact.js',
-        'src/js/**/*.js'
-    ])
+        'build/vendor/interact/interact.js'
+    ]);
+
+    merge(vendors, javascripts)
         .pipe(concat('main.js'))
         .pipe(gulp.dest('dist/js'));
 });
