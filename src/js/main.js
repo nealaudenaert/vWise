@@ -2,14 +2,32 @@ define(function (require) {
 
     var config = require('config');
 
+    var Mousetrap = require('mousetrap');
+
     var Workspace = require('./workspace');
     var BookContentView = require('./content/book');
     var MapContentView = require('./content/map');
     var ImageContentView = require('./content/image');
     var VideoContentView = require('./content/video');
 
+    var FlickrImageSearchProvider = require('./search_provider/flickr_search_provider');
+
 
     var workspace = new Workspace({ el: '.workspace' });
+
+    workspace.addSearchProvider('flickr', new FlickrImageSearchProvider({
+        apiKey: config.flickrApiKey
+    }));
+
+    Mousetrap.bind(['/', 'mod+space'], function (e) {
+        e.preventDefault();
+        workspace.openSearchBox();
+    });
+
+    Mousetrap.bind('esc', function (e) {
+        e.preventDefault();
+        workspace.closeSearchBox();
+    });
 
     var w1 = workspace.createWindow({ title: 'HathiTrust Book Reader' });
     w1.setSize(600, 700);

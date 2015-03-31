@@ -46,6 +46,7 @@ gulp.task('javascripts', function () {
                 'interact':            vendorPath + '/interact/interact',
                 'jquery':              vendorPath + '/jquery/dist/jquery',
                 'marionette':          vendorPath + '/marionette/lib/core/backbone.marionette',
+                'mousetrap':           vendorPath + '/mousetrap/mousetrap',
                 'promise':             vendorPath + '/bluebird/js/browser/bluebird',
                 'underscore':          vendorPath + '/underscore/underscore'
             },
@@ -74,7 +75,7 @@ gulp.task('stylesheets', function () {
         .pipe(gulp.dest('dist/css'));
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', ['html', 'javascripts', 'stylesheets'], function () {
     gulp.watch(srcPath + '/**/*.html', ['html']);
     gulp.watch(srcPath + '/js/**/*', ['javascripts']);
     gulp.watch(srcPath + '/less/**/*.less', ['stylesheets']);

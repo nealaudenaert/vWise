@@ -11,9 +11,13 @@
 @title-color: #fff;
 @title-size: 20px;
 
+@search-bg: #eee;
+
 
 body {
     font: 13px/20px Ubuntu, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 iframe {
@@ -22,10 +26,12 @@ iframe {
 
 .workspace {
     display: block;
-    height: 10000px;
-    width: 10000px;
-    overflow: hidden;
-    position: relative;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: scroll;
     box-shadow: inset 0 0 10px rgba(0,0,0, 0.5);
 }
 
@@ -74,5 +80,29 @@ iframe {
         border-width: @resize-handle-border-size;
         border-color: transparent @resize-handle-color @resize-handle-color transparent;
         border-style: solid;
+    }
+}
+
+#search-form {
+    position: absolute;
+    top: 2em;
+    right: 2em;
+    z-index: 9999;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    width: 100%;
+    max-width: 50em;
+    padding: 4px;
+    background: @search-bg;
+
+    input[type=search] {
+        width: 100%;
+        font-size: 2em;
+        border: 0;
+        background: transparent;
+    }
+
+    button {
+        display: none;
     }
 }
