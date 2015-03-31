@@ -34,7 +34,8 @@ define(function (require) {
                     privacy_filter: 1,  // public photos
                     text: q,
                     per_page: _this.numResults,
-                    extras: 'url_k'
+                    extras: 'url_k',
+                    sort: 'relevance'
                 };
 
                 $.ajax({
@@ -59,8 +60,8 @@ define(function (require) {
                     .map(function (photo) {
                         return {
                             title: photo.title,
-                            width: photo.width_k,
-                            height: photo.height_k,
+                            width: photo.width_k / 4,
+                            height: photo.height_k / 4,
                             lockAspectRatio: true,
                             content: new ImageContentView({
                                 uri: photo.url_k

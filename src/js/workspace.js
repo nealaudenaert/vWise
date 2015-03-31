@@ -63,10 +63,10 @@ define(function (require) {
             // activate newly focused window
             win.setActive(true);
 
-            this._update();
+            this.update();
         },
 
-        _update: function () {
+        update: function () {
             _.each(this.windows, function (win, zIndex) {
                 win.setZIndex(zIndex);
             });
@@ -175,14 +175,14 @@ define(function (require) {
                         });
 
                         w.setSize(result.width, result.height);
-                        w.setPosition(_this.$el.width() * Math.random(), _this.$el.height() * Math.random());
+                        w.setPosition((_this.$el.width() - result.width) * Math.random(), (_this.$el.height() - result.height) * Math.random());
                         w.show(result.content);
 
                         if (result.lockAspectRatio) {
                             w.lockAspectRatio();
                         }
                     });
-
+                    _this.windowStack.update();
                 });
 
                 this.closeSearchBox();
