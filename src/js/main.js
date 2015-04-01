@@ -11,7 +11,8 @@ define(function (require) {
     var VideoContentView = require('./content/video');
     var EditorContentView = require('./content/editor');
 
-    var FlickrImageSearchProvider = require('./search_provider/flickr_search_provider');
+    var FlickrImageSearchProvider = require('./search_provider/flickr_image_search_provider');
+    var GoogleMapSearchProvider   = require('./search_provider/google_map_search_provider');
 
 
     var workspace = new Workspace({ el: '.workspace' });
@@ -19,6 +20,11 @@ define(function (require) {
     workspace.addSearchProvider('flickr', new FlickrImageSearchProvider({
         apiKey: config.flickrApiKey
     }));
+
+    workspace.addSearchProvider('map', new GoogleMapSearchProvider({
+        apiKey: config.googleApiKey
+    }));
+
 
     Mousetrap.bind(['/', 'mod+space'], function (e) {
         e.preventDefault();
@@ -42,6 +48,8 @@ define(function (require) {
         var notes = new EditorContentView();
         w.show(notes);
     });
+
+    return;
 
     var w1 = workspace.createWindow({ title: 'HathiTrust Book Reader' });
     w1.setSize(600, 700);
