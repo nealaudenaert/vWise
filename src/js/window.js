@@ -14,7 +14,8 @@ define(function (require) {
 
         templateHelpers: function () {
             return {
-                title: this.title
+                title: this.title,
+                autoHeight: this.autoHeight
             };
         },
 
@@ -25,10 +26,11 @@ define(function (require) {
 
         initialize: function (options) {
             var opts = _.defaults(options || {}, {
-                title: 'untitled'
+                title: 'untitled',
+                autoHeight: false
             });
 
-            _.extend(this, _.pick(opts, 'title'));
+            _.extend(this, _.pick(opts, 'autoHeight', 'title'));
 
             this._isShown = false;
         },
@@ -47,7 +49,12 @@ define(function (require) {
                 }
             });
 
-            interact(this.el).resizable(true)
+            interact(this.el).resizable({
+                    edges: {
+                        bottom: this.autoHeight ? false : '.resize-handle',
+                        right: '.resize-handle'
+                    }
+                })
                 .on('resizemove', function (evt) {
                     var size = _this.getSize();
 
@@ -55,7 +62,7 @@ define(function (require) {
                         height = size.height + evt.dy;
 
                     // area based aspect ratio normalization
-                    if (_this.aspectRatio) {
+                    if (!_this.autoHeight && _this.aspectRatio) {
                         var targetArea = width * height;
 
                         // let r = w / h
@@ -86,7 +93,7 @@ define(function (require) {
                 this.$el.width(this.width);
             }
 
-            if (this.height) {
+            if (!this.autoHeight && this.height) {
                 this.$el.height(this.height);
             }
 
@@ -118,7 +125,11 @@ define(function (require) {
             this.height = height;
 
             if (this._isShown) {
-                this.$el.width(width).height(height);
+                this.$el.width(width);
+
+                if (!this.autoHeight) {
+                    this.$el.height(height);
+                }
             }
         },
 
