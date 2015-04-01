@@ -14,7 +14,8 @@
     "marionette": "~2.4.0",
     "mousetrap": "~1.5.2",
     "underscore": "~1.8.2",
-    "bluebird": "~2.9.21"
+    "bluebird": "~2.9.21",
+    "ckeditor": "~4.4.7"
   },
   "resolutions": {
     "underscore": "~1.8.2"

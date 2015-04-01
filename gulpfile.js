@@ -67,11 +67,17 @@ gulp.task('javascripts', function () {
 
 
 gulp.task('stylesheets', function () {
-    gulp.src(srcPath + '/less/style.less')
+    var vendorFiles = gulp.src([
+        ]);
+
+    var lessFiles = gulp.src(srcPath + '/less/style.less')
         .pipe(less())
         .pipe(autoprefixer({
             browsers: ['> 5%']
-        }))
+        }));
+
+    return merge(vendorFiles, lessFiles)
+        .pipe(concat('style.css'))
         .pipe(gulp.dest('dist/css'));
 });
 

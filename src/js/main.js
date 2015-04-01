@@ -9,6 +9,7 @@ define(function (require) {
     var MapContentView = require('./content/map');
     var ImageContentView = require('./content/image');
     var VideoContentView = require('./content/video');
+    var EditorContentView = require('./content/editor');
 
     var FlickrImageSearchProvider = require('./search_provider/flickr_search_provider');
 
@@ -27,6 +28,19 @@ define(function (require) {
     Mousetrap.bind('esc', function (e) {
         e.preventDefault();
         workspace.closeSearchBox();
+    });
+
+    Mousetrap.bind('n', function (e) {
+        e.preventDefault();
+        var w = workspace.createWindow({
+            title: prompt('Enter a title:'),
+            autoHeight: true
+        });
+
+        w.setPosition(100, 100);
+        w.setSize(800);
+        var notes = new EditorContentView();
+        w.show(notes);
     });
 
     var w1 = workspace.createWindow({ title: 'HathiTrust Book Reader' });
