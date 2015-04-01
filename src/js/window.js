@@ -111,6 +111,8 @@ define(function (require) {
             if (this._isShown) {
                 this.$el.css({ left: x, top: y });
             }
+
+            this.trigger('change:position', this, x, y);
         },
 
         getPosition: function () {
@@ -131,6 +133,8 @@ define(function (require) {
                     this.$el.height(height);
                 }
             }
+
+            this.trigger('change:size', this, width, height);
         },
 
         getSize: function () {
@@ -146,6 +150,8 @@ define(function (require) {
             if (this._isShown) {
                 this.$el.css('z-index', zIndex);
             }
+
+            this.trigger('change:zIndex', this, zIndex);
         },
 
         getZIndex: function () {
@@ -158,6 +164,8 @@ define(function (require) {
             } else {
                 this.$el.removeClass('active');
             }
+
+            this.trigger('change:active', this, active ? true : false);
         },
 
         lockAspectRatio: function () {
