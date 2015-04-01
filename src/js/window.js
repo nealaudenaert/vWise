@@ -43,6 +43,17 @@ define(function (require) {
             var _this = this;
 
             interact(this.$('> .title-bar').get(0)).draggable({
+                restrict: {
+                    // HACK: hardcoding a '.workspace' here is just wrong.
+                    restriction: '.workspace',
+                    // don't let title bar extend past top or bottom, but allow 3/4 of it to extend past the sides
+                    elementRect: {
+                        top: 0,
+                        left: 0.75,
+                        right: 0.25,
+                        bottom: 1
+                    }
+                },
                 onmove: function (evt) {
                     var position = _this.getPosition();
                     _this.setPosition(position.x + evt.dx, position.y + evt.dy);

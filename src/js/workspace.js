@@ -1,8 +1,6 @@
 define(function (require) {
 
     var Marionette = require('marionette');
-    var Promise = require('promise');
-    var $ = require('jquery');
     var _ = require('underscore');
     var WindowView = require('./window');
 
@@ -183,6 +181,7 @@ define(function (require) {
 
                 var query = parts.join(' ');
                 var _this = this;
+                var workspaceSize = this.getSize();
                 provider.search(query).then(function (results) {
                     _.each(results, function (result) {
                         var w = _this.createWindow({
@@ -190,7 +189,7 @@ define(function (require) {
                         });
 
                         w.setSize(result.width, result.height);
-                        w.setPosition((_this.$el.width() - result.width) * Math.random(), (_this.$el.height() - result.height) * Math.random());
+                        w.setPosition((workspaceSize.width - result.width) * Math.random(), (workspaceSize.height - result.height) * Math.random());
                         w.show(result.content);
 
                         if (result.lockAspectRatio) {
@@ -213,6 +212,13 @@ define(function (require) {
 
             this.searchForm.destroy();
             this.searchForm = null;
+        },
+
+        getSize: function () {
+            return {
+                width: this.$el.width(),
+                height: this.$el.height()
+            };
         }
     });
 

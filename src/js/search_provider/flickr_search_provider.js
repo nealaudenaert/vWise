@@ -1,5 +1,6 @@
 define(function (require) {
 
+    var Promise = require('promise');
     var _ = require('underscore');
     var $ = require('jquery');
 
