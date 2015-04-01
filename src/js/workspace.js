@@ -24,13 +24,17 @@ define(function (require) {
             win.on('focus', function () {
                 this.focus(win);
             }, this);
+
+            win.on('close', function () {
+                this.close(win);
+            }, this);
         },
 
         remove: function (win) {
             var index = this.windows.indexOf(win);
 
             if (index === -1) {
-                return;
+                return false;
             }
 
             // removed window should no longer be active
@@ -42,6 +46,8 @@ define(function (require) {
             if (!_.isEmpty(this.windows)) {
                 _.last(this.windows).setActive(true);
             }
+
+            return true;
         },
 
         focus: function (win) {
@@ -64,6 +70,15 @@ define(function (require) {
             win.setActive(true);
 
             this.update();
+        },
+
+        close: function (win) {
+            if (!this.remove(win)) {
+                return false;
+            }
+            win.destroy();
+            this.update();
+            return true;
         },
 
         update: function () {

@@ -11,6 +11,8 @@
 @title-color: #fff;
 @title-size: 20px;
 
+@close-color: #b44;
+
 @search-bg: #eee;
 
 
@@ -51,6 +53,7 @@ iframe {
     }
 
     > .title-bar {
+        position: relative;
         background: @border-color;
         color: @title-color;
         font-size: @title-size * 2/3;
@@ -58,6 +61,23 @@ iframe {
         padding: 0 @border-size;
         height: @title-size;
         cursor: default;
+
+        > .close {
+            display: block;
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: @border-size;
+            width: (@title-size - @border-size);
+            text-align: center;
+            line-height: (@title-size - @border-size);
+            cursor: pointer;
+            background: @close-color;
+
+            &:hover {
+                background: lighten(@close-color, 5%);
+            }
+        }
     }
 
     > .content {

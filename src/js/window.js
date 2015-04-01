@@ -19,7 +19,8 @@ define(function (require) {
         },
 
         triggers: {
-            mousedown: 'focus'
+            mousedown: 'focus',
+            'click .close': 'close'
         },
 
         initialize: function (options) {
