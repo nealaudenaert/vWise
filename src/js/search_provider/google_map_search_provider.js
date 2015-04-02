@@ -42,21 +42,21 @@ define(function (require) {
             }).then(function (data) {
                 if (data.status !== 'OK') {
                     console.log(data);
-                    throw new Error('unable to fetch map search results');
+                    throw new Error('unable to fetch map search results: ' + (data.error_message || data.status));
                 }
 
                 return data.results;
             });
 
-            return resultsPromise.then(function (results) {
+            return resultsPromise.map(function (result) {
                 return {
-                    title: results[0].formatted_address,
+                    title: result.formatted_address,
                     width: 800,
                     height: 600,
                     content: new MapContentView({
                         apiKey: _this.apiKey,
-                        lat: results[0].geometry.location.lat,
-                        lon: results[0].geometry.location.lng
+                        lat: result.geometry.location.lat,
+                        lon: result.geometry.location.lng
                     })
                 };
             }).catch(function (err) {

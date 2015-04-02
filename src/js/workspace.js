@@ -197,6 +197,9 @@ define(function (require) {
                         }
                     });
                     _this.windowStack.update();
+                }).catch(function (err) {
+                    console.error(err);
+                    alert('unable to display search results');
                 });
 
                 this.closeSearchBox();
