@@ -40,7 +40,7 @@ iframe {
 .window {
     background: @window-color;
     overflow: hidden;
-    min-height: @title-size;
+    min-height: @title-size + 2*@window-padding;
     min-width: 100px;
     border: @border-size solid @border-color;
     box-shadow: 0 2px 5px rgba(0,0,0, 0.4);
@@ -57,8 +57,12 @@ iframe {
         background: @border-color;
         color: @title-color;
         font-size: @title-size * 2/3;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow-x: hidden;
+        overflow-y: visible;
         line-height: @title-size;
-        padding: 0 @border-size;
+        padding: 0 @title-size 0 @border-size;
         height: @title-size;
         cursor: default;
 
@@ -85,6 +89,7 @@ iframe {
         flex: 1;
         display: flex;
         align-items: stretch;
+        overflow: auto;
 
         > * {
             flex: 1;

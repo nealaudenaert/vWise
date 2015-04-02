@@ -195,7 +195,9 @@ define(function (require) {
                         });
 
                         w.setSize(result.width, result.height);
-                        w.setPosition((workspaceSize.width - result.width) * Math.random(), (workspaceSize.height - result.height) * Math.random());
+                        var randX = Math.random() * (workspaceSize.width - result.width);
+                        var randY = Math.random() * (workspaceSize.height - result.height);
+                        w.setPosition(Math.max(0, randX), Math.max(0, randY));
                         w.show(result.content);
 
                         if (result.lockAspectRatio) {
