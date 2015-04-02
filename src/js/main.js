@@ -11,11 +11,16 @@ define(function (require) {
     var VideoContentView = require('./content/video');
     var EditorContentView = require('./content/editor');
 
+    var FarooWebSearchProvider    = require('./search_provider/faroo_web_search_provider');
     var FlickrImageSearchProvider = require('./search_provider/flickr_image_search_provider');
     var GoogleMapSearchProvider   = require('./search_provider/google_map_search_provider');
 
 
     var workspace = new Workspace({ el: '.workspace' });
+
+    workspace.addSearchProvider('web', new FarooWebSearchProvider({
+        apiKey: config.farooApiKey
+    }));
 
     workspace.addSearchProvider('flickr', new FlickrImageSearchProvider({
         apiKey: config.flickrApiKey
