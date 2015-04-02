@@ -22,7 +22,7 @@ define(function (require) {
         apiKey: config.farooApiKey
     }));
 
-    workspace.addSearchProvider('flickr', new FlickrImageSearchProvider({
+    workspace.addSearchProvider(['i', 'img', 'image', 'images', 'pic', 'photo', 'photos', 'flickr'], new FlickrImageSearchProvider({
         apiKey: config.flickrApiKey
     }));
 

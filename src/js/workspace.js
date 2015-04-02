@@ -140,16 +140,22 @@ define(function (require) {
             return win;
         },
 
-        addSearchProvider: function (keyword, provider) {
-            if (_.has(this.searchProviders, keyword)) {
-                throw new Error(keyword + ' search provider is already registered');
+        addSearchProvider: function (keywords, provider) {
+            if (!_.isArray(keywords)) {
+                keywords = [keywords];
             }
 
-            if (!this.defaultSearchProvider) {
-                this.defaultSearchProvider = provider;
-            }
+            _.each(keywords, function (keyword) {
+                if (_.has(this.searchProviders, keyword)) {
+                    throw new Error(keyword + ' search provider is already registered');
+                }
 
-            this.searchProviders[keyword] = provider;
+                if (!this.defaultSearchProvider) {
+                    this.defaultSearchProvider = provider;
+                }
+
+                this.searchProviders[keyword] = provider;
+            }, this);
         },
 
         toggleSearchBox: function () {
@@ -171,7 +177,7 @@ define(function (require) {
             Marionette.triggerMethodOn(this.searchForm, 'show');
 
             this.listenToOnce(this.searchForm, 'search', function (q) {
-                var parts = q.split(/:\s*/);
+                var parts = q.split(/(?:\:\s*|\s+)/);
 
                 var provider = this.defaultSearchProvider;
                 if (parts.length > 1 && _.has(this.searchProviders, parts[0])) {
@@ -179,7 +185,7 @@ define(function (require) {
                     provider = this.searchProviders[keyword];
                 }
 
-                var query = parts.join(' ');
+                var query = parts.join(' ').trim();
                 var _this = this;
                 var workspaceSize = this.getSize();
                 provider.search(query).then(function (results) {
