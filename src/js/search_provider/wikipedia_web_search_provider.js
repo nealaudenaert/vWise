@@ -7,19 +7,15 @@ define(function (require) {
     var WebContentView = require('content/web');
 
 
-    function FarooWebSearchProvider(options) {
+    function WikipediaWebSearchProvider(options) {
         var opts = _.defaults(options || {}, {
             numResults: 10
         });
 
-        if (!opts.apiKey) {
-            throw new TypeError('no API key provided');
-        }
-
-        _.extend(this, _.pick(opts, 'apiKey', 'numResults'));
+        _.extend(this, _.pick(opts, 'numResults'));
     }
 
-    _.extend(FarooWebSearchProvider.prototype, {
+    _.extend(WikipediaWebSearchProvider.prototype, {
         search: function (query) {
             return this._getResults(query).map(function (result) {
                 return {
@@ -34,28 +30,24 @@ define(function (require) {
         },
 
         _getResults: function (query) {
-            var farooOptions = {
-                src: 'web',
-                key: this.apiKey,
-                q: query,
-                length: this.numResults
+            var options = {
+                limit: this.numResults,
+                q: query
             };
 
             return new Promise(function (resolve, reject) {
                 $.ajax({
-                    url: 'http://www.faroo.com/api',
+                    url: 'http://localhost:9999/wikipedia',
                     method: 'GET',
-                    data: farooOptions,
+                    data: options,
                     dataType: 'json',
                     success: resolve,
                     error: reject
                 });
-            }).then(function (data) {
-                return data.results;
             });
         }
     });
 
-    return FarooWebSearchProvider;
+    return WikipediaWebSearchProvider;
 
 });

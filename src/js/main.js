@@ -11,15 +11,20 @@ define(function (require) {
     var VideoContentView = require('./content/video');
     var EditorContentView = require('./content/editor');
 
-    var FarooWebSearchProvider    = require('./search_provider/faroo_web_search_provider');
-    var FlickrImageSearchProvider = require('./search_provider/flickr_image_search_provider');
-    var GoogleMapSearchProvider   = require('./search_provider/google_map_search_provider');
+    var FarooWebSearchProvider     = require('./search_provider/faroo_web_search_provider');
+    var FlickrImageSearchProvider  = require('./search_provider/flickr_image_search_provider');
+    var GoogleMapSearchProvider    = require('./search_provider/google_map_search_provider');
+    var WikipediaWebSearchProvider = require('./search_provider/wikipedia_web_search_provider');
 
 
     var workspace = new Workspace({ el: '.workspace' });
 
     workspace.addSearchProvider('web', new FarooWebSearchProvider({
         apiKey: config.farooApiKey
+    }));
+
+    workspace.addSearchProvider(['w', 'wiki', 'wikipedia'], new WikipediaWebSearchProvider({
+        numResults: 1
     }));
 
     workspace.addSearchProvider(['i', 'img', 'image', 'images', 'pic', 'photo', 'photos', 'flickr'], new FlickrImageSearchProvider({
