@@ -49,5 +49,11 @@
         "single"
       ]
     }
+  },
+  "dependencies": {
+    "bluebird": "^2.9.24",
+    "express": "^4.12.3",
+    "lodash": "^3.6.0",
+    "xml2js": "^0.4.6"
   }
 }
