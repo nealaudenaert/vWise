@@ -1,5 +1,7 @@
 define(function (require) {
 
+    var _ = require('underscore');
+
     var config = require('config');
 
     var Mousetrap = require('mousetrap');
@@ -14,6 +16,7 @@ define(function (require) {
     var FarooWebSearchProvider     = require('./search_provider/faroo_web_search_provider');
     var FlickrImageSearchProvider  = require('./search_provider/flickr_image_search_provider');
     var GoogleMapSearchProvider    = require('./search_provider/google_map_search_provider');
+    var OpenUrlWebSearchProvider   = require('./search_provider/open_url_web_search_provider');
     var WikipediaWebSearchProvider = require('./search_provider/wikipedia_web_search_provider');
 
 
@@ -35,6 +38,12 @@ define(function (require) {
     workspace.addSearchProvider('map', new GoogleMapSearchProvider({
         apiKey: config.googleApiKey
     }));
+
+    _.each(['http', 'https'], function (protocol) {
+        workspace.addSearchProvider(protocol, new OpenUrlWebSearchProvider({
+            protocol: protocol
+        }));
+    });
 
 
     Mousetrap.bind(['/', 'mod+space'], function (e) {
