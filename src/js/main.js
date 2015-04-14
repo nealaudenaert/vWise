@@ -24,6 +24,7 @@ define(function (require) {
     }));
 
     workspace.addSearchProvider(['w', 'wiki', 'wikipedia'], new WikipediaWebSearchProvider({
+        corsHelper: config.corsHelperUrl,
         numResults: 1
     }));
 

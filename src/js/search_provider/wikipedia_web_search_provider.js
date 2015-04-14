@@ -12,7 +12,11 @@ define(function (require) {
             numResults: 10
         });
 
-        _.extend(this, _.pick(opts, 'numResults'));
+        if (!opts.corsHelper) {
+            throw new TypeError('Wikipedia search provider must have CORS helper URL defined');
+        }
+
+        _.extend(this, _.pick(opts, 'corsHelper', 'numResults'));
     }
 
     _.extend(WikipediaWebSearchProvider.prototype, {
@@ -35,9 +39,10 @@ define(function (require) {
                 q: query
             };
 
+            var _this = this;
             return new Promise(function (resolve, reject) {
                 $.ajax({
-                    url: 'http://localhost:9999/wikipedia',
+                    url: _this.corsHelper + '/wikipedia',
                     method: 'GET',
                     data: options,
                     dataType: 'json',
