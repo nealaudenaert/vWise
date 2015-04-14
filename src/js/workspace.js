@@ -161,6 +161,10 @@ define(function (require) {
             return win;
         },
 
+        closeAll: function () {
+            this.windowStack.clear();
+        },
+
         addSearchProvider: function (keywords, provider) {
             if (!_.isArray(keywords)) {
                 keywords = [keywords];

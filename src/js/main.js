@@ -85,6 +85,10 @@ define(function (require) {
         w.show(new EditorContentView());
     });
 
+    Mousetrap.bind(': q a !', function () {
+        workspace.closeAll();
+    });
+
 
     window.save = window.export = function () {
         return JSON.stringify(workspace.getState());
