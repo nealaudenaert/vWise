@@ -79,7 +79,8 @@ define(function (require) {
             autoHeight: true
         });
 
-        w.setPosition(100, 100);
+        var workspaceSize = workspace.getSize();
+        w.setPosition(Math.random() * workspaceSize.width, Math.random() * workspaceSize.height);
         w.setSize(800);
         w.show(new EditorContentView());
     });
