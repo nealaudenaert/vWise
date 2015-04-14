@@ -26,7 +26,18 @@ define(function (require) {
 
         onBeforeShow: function () {
             this.$el.attr('src', 'http://www.youtube.com/embed/' + this.videoId);
+        },
+
+        toJSON: function () {
+            return {
+                type: YoutubePlayerContentView.TYPE,
+                opts: _.pick(this, 'videoId')
+            };
         }
+    });
+
+    _.extend(YoutubePlayerContentView, {
+        TYPE: 'youtube_player'
     });
 
     return YoutubePlayerContentView;

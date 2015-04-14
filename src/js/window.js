@@ -27,16 +27,29 @@ define(function (require) {
         initialize: function (options) {
             var opts = _.defaults(options || {}, {
                 title: 'untitled',
-                autoHeight: false
+                autoHeight: false,
+                x: 0,
+                y: 0,
+                width: 640,
+                height: 480,
+                lockAspectRatio: false
             });
 
-            _.extend(this, _.pick(opts, 'autoHeight', 'title'));
+            _.extend(this, _.pick(opts, 'autoHeight', 'title', 'x', 'y', 'width', 'height'));
+
+            if (opts.lockAspectRatio) {
+                this.lockAspectRatio();
+            }
 
             this._isShown = false;
         },
 
         show: function (view) {
             this.getRegion('content').show(view);
+        },
+
+        getContents: function () {
+            return this.getRegion('content').currentView;
         },
 
         onRender: function () {
@@ -115,6 +128,18 @@ define(function (require) {
             this._isShown = true;
         },
 
+        setTitle: function (title) {
+            this.title = title;
+
+            if (this._isShown) {
+                this.$('.title-bar .title').text(title);
+            }
+        },
+
+        getTitle: function () {
+            return this.title;
+        },
+
         setPosition: function (x, y) {
             this.x = x;
             this.y = y;
@@ -185,6 +210,12 @@ define(function (require) {
 
         unlockAspectRatio: function () {
             this.aspectRatio = null;
+        },
+
+        toJSON: function () {
+            return _.extend(_.pick(this, 'x', 'y', 'width', 'height', 'autoHeight', 'title'), {
+                lockAspectRatio: !_.isUndefined(this.aspectRatio) && this.aspectRatio !== null
+            });
         }
     });
 

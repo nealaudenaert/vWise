@@ -21,7 +21,18 @@ define(function (require) {
 
         onBeforeShow: function () {
             this.$el.attr('src', this.uri);
+        },
+
+        toJSON: function() {
+            return {
+                type: ImageContentView.TYPE,
+                opts: _.pick(this, 'uri')
+            };
         }
+    });
+
+    _.extend(ImageContentView, {
+        TYPE: 'image'
     });
 
     return ImageContentView;

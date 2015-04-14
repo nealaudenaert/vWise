@@ -23,7 +23,7 @@ define(function (require) {
             }
 
             if (!_.all(opts.sources, function (s) { return _.has(s, 'uri') && _.has(s, 'type'); })) {
-                throw new TypeError('source object must contain \'uri\' and \'type\' keys')
+                throw new TypeError('source object must contain \'uri\' and \'type\' keys');
             }
 
             _.extend(this, _.pick(opts, 'sources', 'autoplay'));
@@ -37,7 +37,18 @@ define(function (require) {
             _.each(this.sources, function (src) {
                 this.$el.append('<source src="' + src.uri + '" type="' + src.type + '">');
             }, this);
+        },
+
+        toJSON: function () {
+            return {
+                type: VideoContentView.TYPE,
+                opts: _.pick(this, 'sources', 'autoplay')
+            };
         }
+    });
+
+    _.extend(VideoContentView, {
+        TYPE: 'video'
     });
 
     return VideoContentView;

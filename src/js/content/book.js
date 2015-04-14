@@ -30,7 +30,18 @@ define(function (require) {
             };
 
             this.$el.attr('src', HATHITRUST_EMBED_API_ENDPOINT + '?' + $.param(params));
+        },
+
+        toJSON: function () {
+            return {
+                type: BookContentView.TYPE,
+                opts: _.pick(this, 'bookId')
+            };
         }
+    });
+
+    _.extend(BookContentView, {
+        TYPE: 'book'
     });
 
     return BookContentView;

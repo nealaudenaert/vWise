@@ -35,7 +35,18 @@ define(function (require) {
             };
 
             this.$el.attr('src', GOOGLE_MAP_EMBED_API_ENDPOINT + '?' + $.param(params));
+        },
+
+        toJSON: function () {
+            return {
+                type: MapContentView.TYPE,
+                opts: _.pick(this, 'apiKey', 'lat', 'lon', 'zoom')
+            };
         }
+    });
+
+    _.extend(MapContentView, {
+        TYPE: 'map'
     });
 
     return MapContentView;

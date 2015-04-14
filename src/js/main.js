@@ -7,11 +7,14 @@ define(function (require) {
     var Mousetrap = require('mousetrap');
 
     var Workspace = require('./workspace');
+
     var BookContentView = require('./content/book');
-    var MapContentView = require('./content/map');
-    var ImageContentView = require('./content/image');
-    var VideoContentView = require('./content/video');
     var EditorContentView = require('./content/editor');
+    var ImageContentView = require('./content/image');
+    var MapContentView = require('./content/map');
+    var VideoContentView = require('./content/video');
+    var WebContentView = require('./content/web');
+    var YouTubePlayerContentView = require('./content/youtube_player');
 
     var FarooWebSearchProvider     = require('./search_provider/faroo_web_search_provider');
     var FlickrImageSearchProvider  = require('./search_provider/flickr_image_search_provider');
@@ -21,7 +24,42 @@ define(function (require) {
     var YouTubeVideoSearchProvider = require('./search_provider/youtube_video_search_provider');
 
 
-    var workspace = new Workspace({ el: '.workspace' });
+
+    var Loader = {
+        _types: {},
+
+        addType: function (type) {
+            this._types[type.TYPE] = type;
+        },
+
+        addTypes: function (types) {
+            _.each(types, this.addType, this);
+        },
+
+        load: function (type, opts) {
+            if (!_.has(this._types, type)) {
+                throw new TypeError('no type with name [' + type + '] registered with type loader.');
+            }
+
+            return new this._types[type](opts);
+        }
+    };
+
+    Loader.addTypes([
+        BookContentView,
+        EditorContentView,
+        ImageContentView,
+        MapContentView,
+        VideoContentView,
+        WebContentView,
+        YouTubePlayerContentView
+    ]);
+
+
+    var workspace = new Workspace({
+        el: '.workspace',
+        typeLoader: Loader
+    });
 
     workspace.addSearchProvider('web', new FarooWebSearchProvider({
         apiKey: config.farooApiKey
@@ -73,6 +111,15 @@ define(function (require) {
         var notes = new EditorContentView();
         w.show(notes);
     });
+
+
+    window.save = window.export = function () {
+        return JSON.stringify(workspace.getState());
+    };
+
+    window.load = window.import = function (json) {
+        workspace.setState(_.isString(json) ? JSON.parse(json) : json);
+    };
 
     return;
 

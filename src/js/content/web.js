@@ -23,7 +23,18 @@ define(function (require) {
 
         onBeforeShow: function () {
             this.$el.attr('src', this.uri);
+        },
+
+        toJSON: function () {
+            return {
+                type: WebContentView.TYPE,
+                opts: _.pick(this, 'uri')
+            };
         }
+    });
+
+    _.extend(WebContentView, {
+        TYPE: 'web'
     });
 
     return WebContentView;

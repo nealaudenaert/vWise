@@ -7,6 +7,8 @@ define(function (require) {
 
     function WindowStack() {
         this.windows = [];
+
+        _.bindAll(this, 'push', 'remove', 'focus', 'close', 'clear', 'update');
     }
 
     _.extend(WindowStack.prototype, {
@@ -79,10 +81,19 @@ define(function (require) {
             return true;
         },
 
+        clear: function () {
+            _.invoke(this.windows, 'destroy');
+            this.windows = [];
+        },
+
         update: function () {
             _.each(this.windows, function (win, zIndex) {
                 win.setZIndex(zIndex);
             });
+        },
+
+        toArray: function () {
+            return this.windows.slice();
         }
     });
 
@@ -124,7 +135,17 @@ define(function (require) {
         template: _.constant(''),
         className: 'workspace',
 
-        initialize: function () {
+        initialize: function (options) {
+            var opts = _.defaults(options || {}, {
+
+            });
+
+            if (!opts.typeLoader) {
+                throw new TypeError('no type loader provided');
+            }
+
+            _.extend(this, _.pick(opts, 'typeLoader'));
+
             this.windowStack = new WindowStack();
             this.searchProviders = {};
         },
@@ -230,6 +251,27 @@ define(function (require) {
                 width: this.$el.width(),
                 height: this.$el.height()
             };
+        },
+
+        getState: function () {
+            return {
+                windows: this.windowStack.toArray().map(function (win) {
+                    return {
+                        opts: win.toJSON(),
+                        contents: win.getContents() && win.getContents().toJSON()
+                    };
+                })
+            };
+        },
+
+        setState: function (memento) {
+            this.windowStack.clear();
+
+            _.each(memento.windows, function (attrs) {
+                var win = this.createWindow(attrs.opts);
+                var content = this.typeLoader.load(attrs.contents.type, attrs.contents.opts);
+                win.show(content);
+            }, this);
         }
     });
 
