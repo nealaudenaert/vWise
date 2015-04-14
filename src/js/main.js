@@ -18,6 +18,7 @@ define(function (require) {
     var GoogleMapSearchProvider    = require('./search_provider/google_map_search_provider');
     var OpenUrlWebSearchProvider   = require('./search_provider/open_url_web_search_provider');
     var WikipediaWebSearchProvider = require('./search_provider/wikipedia_web_search_provider');
+    var YouTubeVideoSearchProvider = require('./search_provider/youtube_video_search_provider');
 
 
     var workspace = new Workspace({ el: '.workspace' });
@@ -36,6 +37,10 @@ define(function (require) {
     }));
 
     workspace.addSearchProvider('map', new GoogleMapSearchProvider({
+        apiKey: config.googleApiKey
+    }));
+
+    workspace.addSearchProvider(['v', 'video', 'videos', 'youtube'], new YouTubeVideoSearchProvider({
         apiKey: config.googleApiKey
     }));
 
