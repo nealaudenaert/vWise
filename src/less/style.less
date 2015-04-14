@@ -1,23 +1,31 @@
-@border-color: #77f;
-@border-size: 3px;
+@base-size: 16;
+@rem: 1rem / @base-size;
 
-@window-padding: 5px;
+@border-color: #77f;
+@border-size: 3 * @rem;
+
+@window-padding: 5 * @rem;
 @window-color: #fff;
 
-@resize-handle-size: 20px;
+@resize-handle-size: 20 * @rem;
 @resize-handle-border-size: @window-padding;
 @resize-handle-color: @border-color;
 
 @title-color: #fff;
-@title-size: 20px;
+@title-size: 20 * @rem;
 
 @close-color: #b44;
 
 @search-bg: #eee;
+@search-width: 800 * @rem;
+@search-size: 2em;
+@search-inset: 30 * @rem;
+@search-padding: 4 * @rem;
+
 
 
 body {
-    font: 13px/20px Ubuntu, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: ~"@{base-size}px" Ubuntu, "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 0;
 }
@@ -34,14 +42,14 @@ iframe {
     left: 0;
     right: 0;
     overflow: hidden;
-    box-shadow: inset 0 0 10px rgba(0,0,0, 0.5);
+    box-shadow: inset 0 0 (10 * @rem) rgba(0,0,0, 0.5);
 }
 
 .window {
     background: @window-color;
     overflow: hidden;
     min-height: @title-size + 2*@window-padding;
-    min-width: 100px;
+    min-width: 100 * @rem;
     border: @border-size solid @border-color;
     box-shadow: 0 2px 5px rgba(0,0,0, 0.4);
     position: absolute;
@@ -49,7 +57,7 @@ iframe {
     flex-flow: column nowrap;
 
     &.active {
-        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        box-shadow: 0 (5 * @rem) (20 * @rem) rgba(0,0,0,0.5);
     }
 
     > .title-bar {
@@ -110,19 +118,19 @@ iframe {
 
 #search-form {
     position: absolute;
-    top: 2em;
-    right: 2em;
+    top: @search-inset;
+    right: @search-inset;
     z-index: 9999;
 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    box-shadow: 0 (10 * @rem) (30 * @rem) rgba(0,0,0,0.8);
     width: 100%;
-    max-width: 50em;
-    padding: 4px;
+    max-width: @search-width;
+    padding: @search-padding;
     background: @search-bg;
 
     input[type=search] {
         width: 100%;
-        font-size: 2em;
+        font-size: @search-size;
         border: 0;
         background: transparent;
     }
