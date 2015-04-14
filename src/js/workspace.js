@@ -269,7 +269,7 @@ define(function (require) {
 
             _.each(memento.windows, function (attrs) {
                 var win = this.createWindow(attrs.opts);
-                var content = this.typeLoader.load(attrs.contents.type, attrs.contents.opts);
+                var content = this.typeLoader.load(attrs.contents);
                 win.show(content);
             }, this);
         }
