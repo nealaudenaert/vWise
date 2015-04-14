@@ -269,7 +269,7 @@ define(function (require) {
         },
 
         setState: function (memento) {
-            this.windowStack.clear();
+            // this.windowStack.clear();
 
             _.each(memento.windows, function (attrs) {
                 var win = this.createWindow(attrs.opts);

@@ -85,7 +85,7 @@ define(function (require) {
         w.show(new EditorContentView());
     });
 
-    Mousetrap.bind(': q a !', function () {
+    Mousetrap.bind(': q', function () {
         workspace.closeAll();
     });
 
